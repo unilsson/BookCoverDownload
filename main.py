@@ -26,9 +26,11 @@ def download_book_cover(isbn, save_path="."):
                 cover_response = requests.get(cover_url)
                 cover_response.raise_for_status()
 
-                # Save the image to a file
-                file_extension = cover_url.split(".")[-1]
+                content_type = cover_response.headers["Content-Type"]
+                file_extension = content_type.split("/")[-1]
+
                 save_filename = f"{isbn}_cover.{file_extension}"
+                print(save_filename)
                 save_path = os.path.join(save_path, save_filename)
 
                 with open(save_path, "wb") as file:
@@ -42,6 +44,7 @@ def download_book_cover(isbn, save_path="."):
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
 
-# Example usage:
-isbn = "YOUR_BOOK_ISBN"  # Replace with the actual ISBN
-download_book_cover(isbn, save_path="path/to/save/directory")
+# Example usage
+# Hard-boiled wonderland and the end of the world by Haruki Murakami
+isbn = "1448103681"
+download_book_cover(isbn, save_path=".")
